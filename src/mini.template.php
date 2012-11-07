@@ -38,6 +38,8 @@ class miniTemplate extends miniBase {
 	
 	private function fetch( $name ){
 		$file = $this->vars['path'] . $name .'.'. $this->vars['ext'];
+		// exit now if there is no file
+		if( !is_file($file) ) return;
 		// extract variables
 		if (is_array($this->vars))
 			extract($this->vars);

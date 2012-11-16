@@ -21,7 +21,9 @@ class miniSession extends miniBase {
 		// populate with a specific set (or get the whole session)
 		$this->key = ( $key ) ? $key : false; 
 		
-		$this->vars = array_merge( $this->vars, $this->session());
+		$session = $this->session();
+		if( $session )
+			$this->vars = array_merge( $this->vars, $this->session() );
 		
 	}
 	
@@ -52,7 +54,8 @@ class miniSession extends miniBase {
 	
 	private function session(){
 		// return the whole session if no key specified
-		return ($this->key) ? $_SESSION[$this->key] : $_SESSION;
+		$session = ($this->key) ? $_SESSION[$this->key] : $_SESSION;
+		return is_array( $session ) ? $session : false;
 	}
 	
 }

@@ -88,6 +88,42 @@ class miniMysql extends miniBase {
 	
 	}
 	
+	
+	function update( $table="", $values=false, $id){
+		
+		$params = array();
+		$query = "UPDATE ". $table ." SET ";
+		
+		// add conditions (if available)
+		if($values){ 
+		
+			// get the columns from the $entry
+			$keys = array_keys($values);
+			$wildcards = array_map(function($v) {return ":".$v;}, $keys );
+			
+			$conditions = "";
+			foreach( $values as $k => $v){
+				$conditions .= "$k=:$k";
+				$conditions .= (next($values) === false) ? " " : ", ";
+			}
+			
+			$query .= $conditions;
+		
+			// finally udate the values with the wildcards
+			$params = array_combine ($wildcards, $values);
+			
+		}
+	
+		// target (only) with id
+		$query .= "WHERE id=$id";
+		
+		$result = $this->execute($query, $params);
+		
+		return $result;
+	
+	}
+	
+	
 	// generic method to execute any query
 	private function execute($query, $params) { 
 	

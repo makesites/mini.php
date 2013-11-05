@@ -8,6 +8,8 @@
  */
 class miniTemplate extends miniBase {
 
+	private $_files = array();
+
 	function __construct( $vars=false ){
 
 		// default variables
@@ -27,27 +29,29 @@ class miniTemplate extends miniBase {
 	// insert a view
 	public function load($name=null ){
 		if( is_null($name) ) return;
-		$this->views[$name] = $this->fetch( $name );
+		array_push( $this->_files, $name);
 	}
 
 	// renders the final output
-	public function render(){
-
+	public function render( $data=array() ){
+		// merge data
+		$this->data = array_merge( $this->data, $data);
+		// process the views
+		foreach( $this->_files as $name ){
+			$this->views[$name] = $this->fetch( $name );
+		}
 		// load the layout
 		$template = $this->fetch( $this->vars['layout'] );
-
-		//var_dump($template);
 
 		return $template;
 	}
 
 	// Helpers
-	private function fetch( $name, $data=array() ){
+	private function fetch( $name ){
 		$file = $this->vars['path'] . $name .'.'. $this->vars['ext'];
 		// exit now if there is no file
 		if( !is_file($file) ) return;
 		// extract variables
-		$this->data = array_merge( $this->data, $data);
 		if (is_array($this->data))
 			extract($this->data);
 		// include views

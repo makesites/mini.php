@@ -24,10 +24,14 @@ class miniTemplate extends miniBase {
 
 	}
 
-	public function render(){
+	// insert a view
+	public function load($name=null ){
+		if( is_null($name) ) return;
+		$this->views[$name] = $this->fetch( $name );
+	}
 
-		// get the view first
-		$this->views["body"] = $this->fetch( $this->vars['view'] );
+	// renders the final output
+	public function render(){
 
 		// load the layout
 		$template = $this->fetch( $this->vars['layout'] );
@@ -38,7 +42,6 @@ class miniTemplate extends miniBase {
 	}
 
 	// Helpers
-
 	private function fetch( $name, $data=array() ){
 		$file = $this->vars['path'] . $name .'.'. $this->vars['ext'];
 		// exit now if there is no file
@@ -47,6 +50,8 @@ class miniTemplate extends miniBase {
 		$this->data = array_merge( $this->data, $data);
 		if (is_array($this->data))
 			extract($this->data);
+		// include views
+		$views = $this->views;
 		ob_start();
 		require($file);
 		return ob_get_clean();

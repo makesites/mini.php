@@ -26,10 +26,18 @@ class miniTemplate extends miniBase {
 
 	}
 
-	// insert a view
+	// insert a file view
 	public function load($name=null ){
 		if( is_null($name) ) return;
 		array_push( $this->_files, $name);
+	}
+
+	// insert a static view
+	function view( $name=null, $content="" ){
+		if( is_null($name) ) return;
+		$this->views[$name] = $content;
+		// preserve chainability
+		return $this;
 	}
 
 	// renders the final output

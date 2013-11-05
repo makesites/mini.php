@@ -54,11 +54,13 @@ class miniTemplate extends miniBase {
 		return $template;
 	}
 
-	// Helpers
-	private function fetch( $name ){
+	// process a specific view now
+	function fetch( $name,  $data=array() ){
 		$file = $this->vars['path'] . $name .'.'. $this->vars['ext'];
 		// exit now if there is no file
 		if( !is_file($file) ) return;
+		// merge data
+		$this->data = array_merge( $this->data, $data);
 		// extract variables
 		if (is_array($this->data))
 			extract($this->data);
